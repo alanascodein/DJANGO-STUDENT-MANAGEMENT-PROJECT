@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+       <title>{% block title %}UniversityHub{% endblock %}</title>
+       <link rel="stylesheet" href="{% static 'academic/style.css' %}">
+    </head>
+    <body>
+        <nav>
+            <h1>UniversityHub Portal</h1>
+            <a href="/academic/courses">Courses</a> | <a href="/admin/">Admin</a>
+
+                    
+
+        {% if user.is_authenticated %}
+            <span>Welcome, {{ user.username }}!</span>
+          <!-- <a href="{% url 'logout' %}">Logout</a> -->
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Sign Up</a>
+        {% endif %}
+    
+
+        </nav>
+        <hr>
+        <main>
+        {% block content %}
+        {% endblock %}
+        </main>
+        <hr>
+        <footer>
+             <p> 2026 UniversityHub Systems</p>
+    
+        </footer>
+
+    </body>
+</html>
