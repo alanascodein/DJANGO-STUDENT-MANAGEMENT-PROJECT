@@ -4,7 +4,10 @@ from django.shortcuts import render, redirect
 from .models import Course, Student
 from .forms import StudentForm
 from django.contrib.auth.models import User
+from rest_framework import viewsets
+from .serializers import CourseSerializer, StudentSerializer
 
+from rest_framework.permissions import IsAuthenticated
 
 def hello_world(request):
     return HttpResponse("Welcome to the University Hub!")
@@ -73,7 +76,7 @@ def register_user(request):
 def is_admin(user):
     return user.is_staff
 @user_passes_test(is_admin)
-def delete_student(request, student_id):
+def delete_student(request, id):
     student = Student.objects.get(id=id)
     if student.user:
         student.user.delete()  # Delete the associated User object
@@ -96,3 +99,12 @@ def api_course_list(request):
         'courses': list(courses.values('name', 'code', 'credits'))
     }
     return JsonResponse(data)
+
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated] 

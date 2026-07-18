@@ -29,6 +29,12 @@ class Course(models.Model):
     semester = models.IntegerField(choices=SEMESTER_CHOICES, default=1)
     credits = models.IntegerField()
 
+    syllabus = models.FileField(
+        upload_to='courses/syllabus/',
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return f"{self.code} - {self.name}"
     
@@ -42,7 +48,7 @@ class Student(models.Model):
     courses = models.ManyToManyField(Course, blank=True)
 
     profile_pic = models.ImageField(
-        upload_to='profile_pics/', 
+        upload_to='students/profiles/', 
         null=True, 
         blank=True)
 
